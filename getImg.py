@@ -55,6 +55,7 @@ if __name__ == '__main__':
         urls = csv.reader(csvfile)
         for url in urls:
             imgUrls.append(url[opt.column])
-    imgDownloader = ImageDownloader(imgUrls,opt.worker,opt.folder)
+#    imgDownloader = ImageDownloader(imgUrls,opt.worker,opt.folder)
     print('downloading images with %d processes'%opt.worker)
-    imgDownloader.run()
+#    imgDownloader.run()
+    print('error, ImgDownloader was not implemented.')
