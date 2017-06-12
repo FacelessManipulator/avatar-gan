@@ -15,7 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 BATCH_SIZE = 32
-IMAGE_SIZE = 75
+IMAGE_SIZE = 64
 EPOCH = 25
 cudnn.benchmark = True
 CUDA = True
@@ -63,13 +63,13 @@ class _netG(nn.Module):
             nn.BatchNorm2d(64 * 2),
             nn.ReLU(True),
             # state size. 128 x 16 x 16
-            nn.ConvTranspose2d(64 * 2,     64, 5, 2, 1, bias=False),
+            nn.ConvTranspose2d(64 * 2,     64, 4, 2, 1, bias=False),
             nn.BatchNorm2d(64),
             nn.ReLU(True),
-            # state size. 64 x 36 x 36
+            # state size. 64 x 32 x 32
             nn.ConvTranspose2d(    64,      3, 4, 2, 1, bias=False),
             nn.Tanh()
-            # state size. 3 x 75 x 75
+            # state size. 3 x 64 x 64
         )
 
     def forward(self, input):
@@ -85,12 +85,12 @@ class _netD(nn.Module):
     def __init__(self,):
         super(_netD, self).__init__()
         self.main = nn.Sequential(
-            # input is 3 x 75 x 75
+            # input is 3 x 64 x 64
             nn.Conv2d(3, 64, 4, 2, 1, bias=False),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout2d(0.5),
-            # state size. 64 x 36 x 36
-            nn.Conv2d(64, 64 * 2, 5, 2, 1, bias=False),
+            # state size. 64 x 32 x 32
+            nn.Conv2d(64, 64 * 2, 4, 2, 1, bias=False),
             nn.BatchNorm2d(64 * 2),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout2d(0.5),
@@ -104,7 +104,7 @@ class _netD(nn.Module):
             nn.BatchNorm2d(64 * 8),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout2d(0.5),
-            # state size. 521 x 4 x 4
+            # state size. 512 x 4 x 4
             nn.Conv2d(64 * 8, 1, 4, 1, 0, bias=False),
             nn.Sigmoid()
         )
@@ -140,8 +140,8 @@ noise = Variable(noise)
 fixed_noise = Variable(fixed_noise)
 
 # setup optimizer
-optimizerD = optim.Adam(netD.parameters(), lr=0.00002, betas=(0.5, 0.999))
-optimizerG = optim.Adam(netG.parameters(), lr=0.002, betas=(0.5, 0.999))
+optimizerD = optim.Adam(netD.parameters(), lr=0.0002, betas=(0.5, 0.999))
+optimizerG = optim.Adam(netG.parameters(), lr=0.0002, betas=(0.5, 0.999))
 
 
 for epoch in range(EPOCH):
